@@ -1,0 +1,9 @@
+gatewayProxy:
+  createDefault: true
+
+config:
+  logLevel: "info"  # info, debug
+  kubernetes:
+    defaultIngressClass: true
+  provider:
+    initSyncDelay: "1m"  # for test to see changes in routes quickly

@@ -1,0 +1,25 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: getting-started-ip
+spec:
+  ingressClassName: apisix
+  http:
+    - name: getting-started-ip
+      match:
+        # hosts:
+        #   - apisix.<CUSTOM DOMAIN>
+        paths:
+          - /ip
+      backends:
+        - serviceName: httpbin
+          servicePort: 80
+        #   weight: 70
+        # - serviceName: hello-world-2-svc
+        #   servicePort: 80
+        #   weight: 30
+      # plugins:
+      # - name: proxy-rewrite
+      #   enable: true
+      #   config:
+      #     uri: "/"

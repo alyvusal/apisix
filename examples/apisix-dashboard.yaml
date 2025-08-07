@@ -1,0 +1,17 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: apisix-dashboard
+  namespace: apisix
+spec:
+  ingressClassName: apisix
+  http:
+    - name: apisix-dashboard
+      match:
+        hosts:
+          - apisix-dashboard-172.18.0.2.nip.io
+        paths:
+          - /
+      backends:
+        - serviceName: apisix-dashboard
+          servicePort: 80

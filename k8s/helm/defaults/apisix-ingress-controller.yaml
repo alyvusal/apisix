@@ -1,0 +1,105 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# -- Default values for apisix-ingress-controller.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+#
+nameOverride: ""
+
+fullnameOverride: ""
+
+# -- Override default labels assigned to Apache APISIX ingress controller resource
+labelsOverride: {}
+# labelsOverride:
+#   app.kubernetes.io/name: "{{ .Release.Name }}"
+#   app.kubernetes.io/instance: '{{ include "apisix-ingress-controller.name" . }}'
+
+# -- See https://kubernetes.io/docs/tasks/run-application/configure-pdb/ for more details
+podDisruptionBudget:
+  # -- Enable or disable podDisruptionBudget
+  enabled: false
+  # -- Set the `minAvailable` of podDisruptionBudget. You can specify only one of `maxUnavailable` and `minAvailable` in a single PodDisruptionBudget.
+  # See [Specifying a Disruption Budget for your Application](https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget)
+  # for more details
+  minAvailable: 90%
+  # -- Set the maxUnavailable of podDisruptionBudget
+  maxUnavailable: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+
+deployment:
+  # -- Add annotations to Apache APISIX ingress controller resource
+  annotations: {}
+  podAnnotations: {}
+  replicas: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  # -- Topology Spread Constraints for pod assignment spread across your cluster among failure-domains
+  # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  topologySpreadConstraints: []
+  image:
+    repository: apache/apisix-ingress-controller
+    pullPolicy: IfNotPresent
+    tag: "2.0.0-rc2"
+  # -- Set pod resource requests & limits
+  resources: {}
+
+config:
+  logLevel: "info"
+  controllerName: apisix.apache.org/apisix-ingress-controller
+  leaderElection:
+    id: "apisix-ingress-controller-leader"
+    leaseDuration: "15s"
+    renewDeadline: "10s"
+    retryPeriod: "2s"
+    disable: false
+  metricsAddr: ":8080"
+  enableHTTP2: false
+  probeAddr: ":8081"
+  secureMetrics: false
+  execADCTimeout: "15s"
+  provider:
+    type: "apisix"
+    syncPeriod: "1s"
+    initSyncDelay: "20m"
+  kubernetes:
+    ingressClass: apisix
+    defaultIngressClass: false
+
+gatewayProxy:
+  createDefault: false
+  provider:
+    type: ControlPlane
+    controlPlane:
+      endpoints: []
+      auth:
+        type: AdminKey
+        adminKey:
+          value: "edd1c9f034335f136f87ad84b625c8f1"
+
+apisix:
+  adminService:
+    namespace: apisix-ingress
+    name: apisix-admin
+    port: 9180
+

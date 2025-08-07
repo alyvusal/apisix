@@ -1,0 +1,49 @@
+service:
+  type: LoadBalancer
+
+ingress:
+  enabled: true
+  hosts:
+    - host: apisix-172.18.0.2.nip.io
+      paths: ["/"]
+
+metrics:
+  serviceMonitor:
+    enabled: false
+
+etcd:  # we use yaml as config_provider, so etcd not needed. it is for config from ui
+  enabled: false
+
+apisix:
+  admin:
+    enabled: true
+    enable_admin_ui: true
+    credentials:
+      admin: edd1c9f034335f136f87ad84b625c8f1
+      viewer: 4054f7cf07e344346cd3f287985e76a2
+    allow:
+      ipList:
+        - 0.0.0.0/0
+    ingress:
+      enabled: true
+      hosts:
+        - host: apisix-admin-172.18.0.2.nip.io
+          paths: ["/apisix"]
+  # https://apisix.apache.org/docs/apisix/deployment-modes/
+  deployment:
+    mode: standalone
+    role: "data_plane"
+    role_data_plane:
+      config_provider: "yaml"  # yaml, etcd
+
+# Recomended to install ingress controller from separate chart
+# ingress-controller:
+#   enabled: true
+#   gatewayProxy:
+#     createDefault: true
+#   config:
+#     logLevel: "info"  # info, debug
+#     kubernetes:
+#       defaultIngressClass: true
+#     provider:
+#       initSyncDelay: "1m"  # for test to see changes in routes quickly
