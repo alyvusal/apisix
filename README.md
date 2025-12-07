@@ -13,7 +13,7 @@ helm repo add apisix https://charts.apiseven.com
 # apisix and ingress controller at the same time
 helm upgrade -i apisix apisix/apisix \
   --create-namespace --namespace apisix-ingress \
-  --version 2.11.3 \
+  --version 2.12.4 \
   -f k8s/helm/apisix-etcd.yaml
 
 kubectl -n apisix-ingress wait --for=condition=Ready pod -l app.kubernetes.io/instance=apisix --timeout 10m
@@ -32,7 +32,7 @@ Note: APISIX Ingress Controller will try to establish a connection with APISIX a
 ```bash
 helm upgrade -i apisix-ingress-controller apisix/apisix-ingress-controller \
   --create-namespace --namespace apisix-ingress \
-  --version 1.0.3 \
+  --version 1.0.7 \
   -f k8s/helm/apisix-ingress-controller.yaml
 
 kubectl -n apisix-ingress wait --for=condition=Ready pod -l app.kubernetes.io/instance=apisix-ingress-controller --timeout 10m
@@ -51,6 +51,8 @@ helm upgrade -i apisix-dashboard apisix/apisix-dashboard \
   --version 0.8.3 \
   -f k8s/helm/apisix-dashboard.yaml
 ```
+
+Access UI: [http://apisix-dashboard-172.18.0.2.nip.io](http://apisix-dashboard-172.18.0.2.nip.io), credentials: `admin:admin`
 
 ## Cleanup
 

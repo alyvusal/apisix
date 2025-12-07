@@ -1,0 +1,19 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixGlobalRule
+metadata:
+  name: global-oidc
+spec:
+  plugins:
+    - name: openid-connect
+      enable: true
+      config:
+        bearer_only: false
+        session:
+          secret: 3DOqn2p6+iq4GPaG264tt0Tt6NZG2uQyDplhVcz9VCA=
+        client_id: kong-oidc
+        client_secret: wRgUBlZ8PwOLK8LFWYwpbw4yb1W1OADy
+        discovery: "http://keycloak-172.18.0.2.nip.io/auth/realms/kong-oidc/.well-known/openid-configuration"
+        introspection_endpoint: "http://keycloak-172.18.0.2.nip.io/auth/realms/kong-oidc/protocol/openid-connect/token/introspect"
+        introspection_endpoint_auth_method: client_secret_post
+        realm: kong-oidc
+        redirect_uri: /oauth2/callback
